@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/corppark-360/db/schema.sql" value="cc765574-99e1-48e8-8e6f-e4c642b1053d" />
+    <file url="file://$PROJECT_DIR$/corppark-360/db/seed.sql" value="cc765574-99e1-48e8-8e6f-e4c642b1053d" />
+  </component>
+</project>
