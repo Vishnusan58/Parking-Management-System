@@ -1,3 +1,4 @@
+use corppark360;
 INSERT INTO zones (zone_name, access_level) VALUES
   ('EV/Visitor', 'EV'),
   ('Senior', 'SENIOR'),

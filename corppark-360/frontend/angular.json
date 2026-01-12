@@ -14,7 +14,7 @@
             "outputPath": "dist/corppark-360-frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": [],
+            "polyfills": ["src/polyfills.ts"],
             "tsConfig": "tsconfig.app.json",
             "assets": ["src/assets"],
             "styles": ["src/styles.css"],
@@ -30,5 +30,8 @@
       }
     }
   },
-  "defaultProject": "corppark-360-frontend"
+  "defaultProject": "corppark-360-frontend",
+  "cli": {
+    "analytics": "49103f94-b303-486f-897b-ae2901bd178c"
+  }
 }
