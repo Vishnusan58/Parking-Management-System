@@ -1,0 +1,15 @@
+<div class="card">
+  <h2>Visitor Invite</h2>
+  <form [formGroup]="form" (ngSubmit)="submit()" class="grid">
+    <input class="input" formControlName="guestName" placeholder="Guest Name" />
+    <input class="input" formControlName="guestEmail" placeholder="Guest Email" />
+    <button class="btn" type="submit">Generate Invite</button>
+  </form>
+  <p *ngIf="error" style="color: #dc2626;">{{ error }}</p>
+
+  <div *ngIf="invite" style="margin-top: 16px;" class="card">
+    <h3>Invite Token</h3>
+    <p style="font-size: 20px;"><strong>{{ invite.qrToken }}</strong></p>
+    <p>Valid until {{ invite.validUntil | date:'short' }}</p>
+  </div>
+</div>

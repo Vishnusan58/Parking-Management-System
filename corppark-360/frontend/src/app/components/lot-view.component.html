@@ -1,0 +1,20 @@
+<div class="card">
+  <h2>Live Lot View</h2>
+  <div style="margin-bottom: 16px;">
+    <label for="floor">Select Floor</label>
+    <select id="floor" class="input" [(ngModel)]="selectedFloor" (change)="onFloorChange()">
+      <option *ngFor="let floor of floors" [value]="floor">Floor {{ floor }}</option>
+    </select>
+  </div>
+
+  <div class="slot-grid">
+    <div
+      *ngFor="let slot of slots"
+      class="slot"
+      [class.free]="slot.status === 'FREE'"
+      [class.occupied]="slot.status === 'OCCUPIED'">
+      <div>{{ slot.slotCode }}</div>
+      <small>{{ slot.zoneName }}</small>
+    </div>
+  </div>
+</div>

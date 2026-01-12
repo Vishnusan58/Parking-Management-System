@@ -1,0 +1,14 @@
+<div class="card">
+  <h2>Employee Login</h2>
+  <p>Enter your employee ID to access CorpPark 360.</p>
+  <form [formGroup]="form" (ngSubmit)="submit()" class="grid">
+    <input class="input" formControlName="empId" placeholder="Employee ID" />
+    <button class="btn" type="submit">Login</button>
+  </form>
+  <p *ngIf="errorMessage" style="color: #dc2626;">{{ errorMessage }}</p>
+  <p *ngIf="infoMessage" style="color: #16a34a;">{{ infoMessage }}</p>
+
+  <div style="margin-top: 16px;">
+    <button class="btn secondary" (click)="register()">Quick Register</button>
+  </div>
+</div>

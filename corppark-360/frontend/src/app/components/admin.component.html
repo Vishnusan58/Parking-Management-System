@@ -1,0 +1,25 @@
+<div class="card">
+  <h2>Admin Violations</h2>
+  <div *ngIf="!isAdmin" style="color: #dc2626;">Admin access required.</div>
+
+  <div *ngIf="isAdmin">
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+      <input class="input" [(ngModel)]="empId" placeholder="Employee ID" />
+      <input class="input" type="number" [(ngModel)]="slotId" placeholder="Slot ID" />
+      <input class="input" [(ngModel)]="reason" placeholder="Reason" />
+      <button class="btn" (click)="createViolation()">Create Violation</button>
+    </div>
+
+    <p *ngIf="message" style="color: #16a34a;">{{ message }}</p>
+    <p *ngIf="error" style="color: #dc2626;">{{ error }}</p>
+
+    <div style="margin-top: 16px;">
+      <h3>Recent Violations</h3>
+      <div class="card" *ngFor="let violation of violations" style="margin-bottom: 12px;">
+        <p><strong>{{ violation.employee?.empId }}</strong> - Slot {{ violation.slot?.slotId }}</p>
+        <p>{{ violation.reason }}</p>
+        <small>{{ violation.createdTs | date:'short' }}</small>
+      </div>
+    </div>
+  </div>
+</div>
