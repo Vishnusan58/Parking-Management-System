@@ -1,0 +1,30 @@
+<div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+  <div class="card">
+    <h2>My Parking</h2>
+    <div *ngIf="myCar; else noCar">
+      <p><strong>Slot:</strong> {{ myCar?.slotCode }} (Floor {{ myCar?.floorNo }})</p>
+      <p><strong>Zone:</strong> {{ myCar?.zoneName }}</p>
+      <p><strong>Pinned Pillar:</strong> {{ myCar?.pinnedPillarId || 'Not set' }}</p>
+    </div>
+    <ng-template #noCar>
+      <p>No active reservation.</p>
+    </ng-template>
+  </div>
+
+  <div class="card">
+    <h2>Actions</h2>
+    <div class="grid">
+      <button class="btn" (click)="allocate()">Enter / Allocate</button>
+      <button class="btn secondary" (click)="exit()">Exit</button>
+      <div>
+        <input class="input" [(ngModel)]="pillarId" placeholder="Pillar ID (e.g., P-12)" />
+        <button class="btn" style="margin-top: 8px;" (click)="pin()">Set My Spot</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 16px;" *ngIf="message || error">
+  <p *ngIf="message" style="color: #16a34a;">{{ message }}</p>
+  <p *ngIf="error" style="color: #dc2626;">{{ error }}</p>
+</div>

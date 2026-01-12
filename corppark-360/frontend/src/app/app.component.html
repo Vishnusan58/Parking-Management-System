@@ -1,0 +1,16 @@
+<nav class="nav">
+  <div>
+    <strong>CorpPark 360</strong>
+    <span class="badge" *ngIf="authService.empId()">{{ userLabel() }}</span>
+  </div>
+  <div class="nav-links">
+    <a routerLink="/">Login</a>
+    <a routerLink="/dashboard">Dashboard</a>
+    <a routerLink="/lot">Live Lot</a>
+    <a routerLink="/visitor">Visitor Invite</a>
+    <a *ngIf="authService.isAdmin()" routerLink="/admin">Admin</a>
+  </div>
+</nav>
+<div class="container">
+  <router-outlet></router-outlet>
+</div>
