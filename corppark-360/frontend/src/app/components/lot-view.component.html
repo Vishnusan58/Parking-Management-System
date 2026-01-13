@@ -1,20 +1,219 @@
-<div class="card">
-  <h2>Live Lot View</h2>
-  <div style="margin-bottom: 16px;">
-    <label for="floor">Select Floor</label>
-    <select id="floor" class="input" [(ngModel)]="selectedFloor" (change)="onFloorChange()">
-      <option *ngFor="let floor of floors" [value]="floor">Floor {{ floor }}</option>
-    </select>
+<div class="lot-view-container">
+  <!-- Header Section -->
+  <div class="lot-header">
+    <div class="header-content">
+      <div class="title-section">
+        <h1 class="page-title">
+          <svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+          </svg>
+          Live Parking Lot
+        </h1>
+        <p class="subtitle">Real-time occupancy monitoring</p>
+      </div>
+      <div class="update-indicator">
+        <span class="pulse-dot"></span>
+        <span class="update-text">Live</span>
+      </div>
+    </div>
   </div>
 
-  <div class="slot-grid">
-    <div
-      *ngFor="let slot of slots"
-      class="slot"
-      [class.free]="slot.status === 'FREE'"
-      [class.occupied]="slot.status === 'OCCUPIED'">
-      <div>{{ slot.slotCode }}</div>
-      <small>{{ slot.zoneName }}</small>
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+    <div class="stat-card stat-total">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Total Slots</div>
+        <div class="stat-value">{{ getTotalSlots() }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card stat-free">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Available</div>
+        <div class="stat-value">{{ getFreeSlots() }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card stat-occupied">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Occupied</div>
+        <div class="stat-value">{{ getOccupiedSlots() }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card stat-occupancy">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Occupancy Rate</div>
+        <div class="stat-value">{{ getOccupancyRate() }}%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls Section -->
+  <div class="controls-section">
+    <div class="control-group">
+      <label for="floor" class="control-label">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+        Floor
+      </label>
+      <select id="floor" class="control-select" [(ngModel)]="selectedFloor" (change)="onFloorChange()">
+        <option *ngFor="let floor of floors" [value]="floor">Floor {{ floor }}</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label for="zone" class="control-label">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+        </svg>
+        Zone Filter
+      </label>
+      <select id="zone" class="control-select" [(ngModel)]="selectedZone" (change)="onZoneChange()">
+        <option value="">All Zones</option>
+        <option *ngFor="let zone of getUniqueZones()" [value]="zone">{{ zone }}</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label for="search" class="control-label">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        Search Slot
+      </label>
+      <input
+        id="search"
+        type="text"
+        class="control-input"
+        placeholder="Enter slot code..."
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange()" />
+    </div>
+  </div>
+
+  <!-- Legend Section -->
+  <div class="legend-section">
+    <div class="legend-title">Legend:</div>
+    <div class="legend-items">
+      <div class="legend-item">
+        <span class="legend-color status-free"></span>
+        <span class="legend-text">Available</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-color status-occupied"></span>
+        <span class="legend-text">Occupied</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-color status-ev"></span>
+        <span class="legend-text">EV Charger</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-color status-highlighted"></span>
+        <span class="legend-text">Selected</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Parking Grid Section -->
+  <div class="parking-lot-card">
+    <div class="parking-header">
+      <h3 class="parking-title">
+        <span *ngIf="selectedFloor">Floor {{ selectedFloor }}</span>
+        <span *ngIf="selectedZone"> - {{ selectedZone }}</span>
+        <span *ngIf="!selectedFloor">Select a floor</span>
+      </h3>
+      <div class="slot-count">{{ getFilteredSlots().length }} slots</div>
+    </div>
+
+    <div class="parking-grid" *ngIf="getFilteredSlots().length > 0">
+      <div
+        *ngFor="let slot of getFilteredSlots()"
+        class="parking-slot"
+        [class.slot-free]="slot.status === 'FREE'"
+        [class.slot-occupied]="slot.status === 'OCCUPIED'"
+        [class.slot-ev]="slot.hasEvCharger"
+        [class.slot-highlighted]="isHighlighted(slot)"
+        (click)="onSlotClick(slot)">
+
+        <div class="slot-header">
+          <div class="slot-code">{{ slot.slotCode }}</div>
+          <div class="slot-status-icon">
+            <svg *ngIf="slot.status === 'FREE'" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <svg *ngIf="slot.status === 'OCCUPIED'" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="slot-details">
+          <div class="slot-zone">
+            <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            {{ slot.zoneName }}
+          </div>
+          <div class="slot-features" *ngIf="slot.hasEvCharger">
+            <svg class="icon-xs" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/>
+            </svg>
+            EV
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="getFilteredSlots().length === 0">
+      <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+      </svg>
+      <p class="empty-text">No slots found</p>
+      <p class="empty-subtext">Try adjusting your filters</p>
+    </div>
+  </div>
+
+  <!-- Zone Summary Section -->
+  <div class="zone-summary-section" *ngIf="slots.length > 0">
+    <h3 class="section-title">Zone Overview</h3>
+    <div class="zone-cards">
+      <div *ngFor="let zone of getZoneSummary()" class="zone-card">
+        <div class="zone-card-header">
+          <div class="zone-name">{{ zone.name }}</div>
+          <div class="zone-badge">{{ zone.available }}/{{ zone.total }}</div>
+        </div>
+        <div class="zone-progress">
+          <div class="zone-progress-bar">
+            <div class="zone-progress-fill" [style.width.%]="zone.occupancyRate"></div>
+          </div>
+        </div>
+        <div class="zone-stats">
+          <span class="zone-stat-item">{{ zone.occupancyRate }}% occupied</span>
+        </div>
+      </div>
     </div>
   </div>
 </div>
